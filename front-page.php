@@ -296,68 +296,146 @@ wp_reset_postdata(); // Сбрасываем $post
 
 <!-- вывести на главной странице список статей, которые идут дальше по макету -->
 <div class="container">
-  <div class="digest-wrapper">
-    <ul class="digest">
-      <?php
-      global $post;
-  
-      $myposts = get_posts([ 
-        'numberposts' => 6,
-        'category_name' => 'news, opinion, articles',
-        'category__not_in' => 23,
-      ]);
-  
-      if( $myposts ){
-        foreach( $myposts as $post ){
-          setup_postdata( $post );
-          ?>
-          <!-- Вывода постов, функции цикла: the_title() и т.д. -->
-          <li class="digest-item">
-            <a href="<?php echo get_the_permalink(); ?>" class="digest-item-permalink">
-              <img src="<?php echo get_the_post_thumbnail_url(); ?>" class="digest-thumb">
-            </a>
-            <div class="digest-info">
-              <button class="bookmark">
-                <svg width="14" height="18" class="icon icon-bookmark">
-                  <use xlink:href=""></use>
-                </svg>
-              </button>
-              <a href="#" class="category-link javascript"><?php $category = get_the_category(); echo $category[0]->name; ?></a>
-              <a href="#" class="digest-item-permalink">
-                <h3 class="digest-title"><?php echo mb_strimwidth(get_the_title(), 0, 50, '...'); ?></h3>
+  <div class="favorites main-grid">
+    <div class="digest-wrapper">
+      <ul class="digest">
+        <?php
+        global $post;
+    
+        $myposts = get_posts([ 
+          'numberposts' => 6,
+          'category_name' => 'news, opinion, articles',
+          'category__not_in' => 23,
+        ]);
+    
+        if( $myposts ){
+          foreach( $myposts as $post ){
+            setup_postdata( $post );
+            ?>
+            <!-- Вывода постов, функции цикла: the_title() и т.д. -->
+            <li class="digest-item">
+              <a href="<?php echo get_the_permalink(); ?>" class="digest-item-permalink">
+                <img src="<?php echo get_the_post_thumbnail_url(); ?>" class="digest-thumb">
               </a>
-              <p class="digest-excerpt"><?php echo mb_strimwidth(get_the_excerpt(), 0, 160, '...'); ?></p>
-              <div class="digest-footer">
-                <span class="digest-date"><?php the_time('j F'); ?></span>
-                <div class="comments digest-comments">
-                  <img src="<?php echo get_template_directory_uri(  ) . '/assets/images/comment.svg'; ?>" class="icon comments-icon" alt="icon: comment">
-                  <span class="comments-counter"><?php comments_number( "0", '1', '%' ); ?></span>
+              <div class="digest-info">
+                <button class="bookmark">
+                  <svg width="14" height="18" class="icon icon-bookmark">
+                    <use xlink:href=""></use>
+                  </svg>
+                </button>
+                <a href="#" class="category-link javascript"><?php $category = get_the_category(); echo $category[0]->name; ?></a>
+                <a href="#" class="digest-item-permalink">
+                  <h3 class="digest-title"><?php echo mb_strimwidth(get_the_title(), 0, 50, '...'); ?></h3>
+                </a>
+                <p class="digest-excerpt"><?php echo mb_strimwidth(get_the_excerpt(), 0, 160, '...'); ?></p>
+                <div class="digest-footer">
+                  <span class="digest-date"><?php the_time('j F'); ?></span>
+                  <div class="comments digest-comments">
+                    <img src="<?php echo get_template_directory_uri(  ) . '/assets/images/comment.svg'; ?>" class="icon comments-icon" alt="icon: comment">
+                    <span class="comments-counter"><?php comments_number( "0", '1', '%' ); ?></span>
+                  </div>
+                  <div class="likes digest-likes">
+                    <img src="<?php echo get_template_directory_uri(  ) . '/assets/images/heart.svg'; ?>" alt="icon: like" class="likes-icon">
+                    <span class="likes-counter"><?php comments_number( "0", '1', '%' ); ?></span>
+                  </div>
                 </div>
-                <div class="likes digest-likes">
-                  <img src="<?php echo get_template_directory_uri(  ) . '/assets/images/heart.svg'; ?>" alt="icon: like" class="likes-icon">
-                  <span class="likes-counter"><?php comments_number( "0", '1', '%' ); ?></span>
-                </div>
+                <!-- /.digest-footer -->
               </div>
-              <!-- /.digest-footer -->
-            </div>
-            <!-- /.digest-info -->
-          </li>
-          <?php 
+              <!-- /.digest-info -->
+            </li>
+            <?php 
+          }
+        } else {
+          // Постов не найдено
+          ?> <p>Постов нет</p> <?php
         }
-      } else {
-        // Постов не найдено
-        ?> <p>Постов нет</p> <?php
-      }
-  
-      wp_reset_postdata(); // Сбрасываем $post
-      ?>
-    </ul>
+    
+        wp_reset_postdata(); // Сбрасываем $post
+        ?>
+      </ul>
+    </div>
+    <!-- /.digest-wrapper -->  
+    <!-- Подключаем нижний сайдбар -->
+    <?php get_sidebar('home-bottom'); ?>
   </div>
-  <!-- /.digest-wrapper -->
-  <!-- Подключаем нижний сайдбар -->
-  <?php get_sidebar('home-bottom'); ?>
+  <!-- /.favorites -->
 </div>
 <!-- /.container -->
+
+<div class="special">
+  <div class="container">
+    <div class="special-grid">
+      <div class="photo-report">
+        <!-- Slider main container -->
+        <div class="swiper-container photo-report-slider">
+          <!-- Additional required wrapper -->
+          <div class="swiper-wrapper">
+            <!-- Slides -->
+            <div class="swiper-slide">
+              <img src="">
+            </div>
+            <div class="swiper-slide">
+              <img src="">
+            </div>
+            <div class="swiper-slide">
+              <img src="">
+            </div>
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+        <div class="photo-report-content">
+          <a href="#" class="category-link">Фоторубрика</a>
+          <a href="#" class="author">
+            <img src="" alt="" class="author-avatar">
+            <div class="author-bio">
+              <span class="author-name">Артем Исламов</span>
+              <span class="author-rank">Должность</span>
+            </div>
+          </a>
+          <h3 class="photo-report-title">Выбор читателей: где удобнее работать фрилансеру</h3>
+          <a href="#" class="button photo-report-button">
+            <svg width="19" height="15" class="icon photo-report-icon">
+              <use xlink:href=""></use>
+            </svg>
+            Смотреть фото
+            <span class="photo-report-counter">3</span>
+          </a>
+        </div>
+        <!-- /.photo-report-content -->
+      </div>
+      <!-- /.photo-report -->
+      <div class="other">
+        <div class="career-post">
+          <a href="#" class="category-link">Карьера</a>
+          <h3 class="career-post-title">Вопросы на собеседовании для джуна</h3>
+          <p class="career-post-excerpt">
+            Каверзные и не очень вопросы, которых боятся новички, когда идут на собеседование
+          </p>
+          <a href="#" class="more">Читать далее</a>
+        </div>
+        <!-- /.career-post -->
+        <div class="other-posts">
+          <a href="#" class="other-post other-post-default">
+            <h4 class="other-post-title">Самые крутые функции в...</h4>
+            <p class="other-post-excerpt">Тут полезный контент</p>
+            <span class="other-post-date">3 декабря 2020</span>
+          </a>
+          <a href="#" class="other-post other-post-default">
+            <h4 class="other-post-title">Новые возможности язык...</h4>
+            <p class="other-post-excerpt">Тут про новые фичи языка CSS</p>
+            <span class="other-post-date">3 декабря 2020</span>
+          </a>
+        </div>
+        <!-- /.other-posts -->
+      </div>
+      <!-- /.other -->
+    </div>
+    <!-- /.special-grid -->
+  </div>
+  <!-- /.container -->
+</div>
+<!-- /.special -->
+
 
 
 
