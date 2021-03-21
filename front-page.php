@@ -127,7 +127,12 @@
           <a href="<?php echo get_the_permalink(); ?>" class="article-permalink">
             <h4 class="article-title"><?php echo mb_strimwidth(get_the_title(), 0, 50, '...'); ?></h4>
           </a>
-          <img width="65" height="65" src="<?php echo get_the_post_thumbnail_url( null, 'homepage-thumb' ) ?>" alt="">
+          <img width="65" height="65" src="<?php if( has_post_thumbnail() ) {
+                    echo get_the_post_thumbnail_url(null, 'thumb');
+                  }
+                  else {
+                    echo get_template_directory_uri().'/assets/images/img-default.png';
+                  } ?>" alt="">
         </li>
       <?php 
         }
@@ -163,7 +168,6 @@
               ?>
                 <li class="article-grid-item article-grid-item-1">
                   <a href="<?php the_permalink(); ?>" class="article-grid-permalink">
-                    <!-- <img class="article-grid-thumb" src="<?php echo get_the_post_thumbnail_url() ?>"> -->
                     <span class="category-name"><?php $category = get_the_category(); echo $category[0]->name; ?></span>
                     <h4 class="article-grid-title"><?php echo get_the_title(); ?></h4>
                     <p class="article-grid-excerpt"><?php echo mb_strimwidth(get_the_excerpt(), 0, 90, '...'); ?></p>
@@ -174,7 +178,9 @@
                         <span class="author-name"><strong><?php the_author(); ?></strong>: <?php the_author_meta( 'description'); ?></span>
                       </div>
                       <div class="comments">
-                        <img src="<?php echo get_template_directory_uri(  ) . '/assets/images/comment.svg'; ?>" class="icon comments-icon" alt="icon: comment">
+                        <svg width="19" height="15" class="icon comments-icon">
+                          <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#comment"></use>
+                        </svg>
                         <span class="comments-counter"><?php comments_number( "0", '1', '%' ); ?></span>
                       </div>
                     </div>
@@ -187,7 +193,12 @@
             case '2':
               ?>
                 <li class="article-grid-item article-grid-item-2">
-                  <img src="<?php echo get_the_post_thumbnail_url() ?>" class="article-grid-thumb">
+                  <img src="<?php if( has_post_thumbnail() ) {
+                      echo get_the_post_thumbnail_url();
+                    }
+                    else {
+                      echo get_template_directory_uri().'/assets/images/img-default.png';
+                    } ?>" class="article-grid-thumb">
                   <a href="<?php the_permalink(); ?>" class="article-grid-permalink">
                     <span class="tag">
                       <?php $posttags = get_the_tags();
@@ -206,11 +217,15 @@
                           <span class="author-name"><strong><?php the_author(); ?></strong></span>
                           <span class="date"><?php the_time('j F'); ?></span>
                           <div class="comments">
-                            <img src="<?php echo get_template_directory_uri(  ) . '/assets/images/comment.svg'; ?>" class="icon comments-icon" alt="icon: comment">
+                            <svg width="19" height="15" class="icon comments-icon">
+                              <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#comment"></use>
+                            </svg>
                             <span class="comments-counter"><?php comments_number( "0", '1', '%' ); ?></span>
                           </div>
                           <div class="likes">
-                            <img src="<?php echo get_template_directory_uri(  ) . '/assets/images/heart.svg'; ?>" class="icon likes-icon" alt="icon: like">
+                            <svg width="19" height="15" class="icon likes-icon">
+                              <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#heart"></use>
+                            </svg>
                             <span class="likes-counter"><?php comments_number( "0", '1', '%' ); ?></span>
                           </div>
                         </div>
@@ -227,7 +242,12 @@
             case '3':  ?>
                 <li class="article-grid-item article-grid-item-3">
                   <a href="<?php the_permalink(); ?>" class="article-grid-permalink">
-                    <img src="<?php echo get_the_post_thumbnail_url(); ?>" alt="" class="article-thumb">
+                    <img src="<?php if( has_post_thumbnail() ) {
+                      echo get_the_post_thumbnail_url();
+                    }
+                    else {
+                      echo get_template_directory_uri().'/assets/images/img-default.png';
+                    } ?>" alt="" class="article-thumb">
                     <h4 class="article-grid-title"><?php echo mb_strimwidth(get_the_title(), 0, 50, '...'); ?></h4>
                   </a>
                 </li>
@@ -278,7 +298,12 @@ if ( $query->have_posts() ) {
 	while ( $query->have_posts() ) {
 		$query->the_post();
 		?>
-		<section class="investigation" style="background: linear-gradient(0deg, rgba(64, 48, 61, 0.45), rgba(64, 48, 61, 0.45)), url(<?php echo get_the_post_thumbnail_url(); ?>) no-repeat center center">
+		<section class="investigation" style="background: linear-gradient(0deg, rgba(64, 48, 61, 0.45), rgba(64, 48, 61, 0.45)), url(<?php if( has_post_thumbnail() ) {
+        echo get_the_post_thumbnail_url();
+      }
+      else {
+        echo get_template_directory_uri().'/assets/images/img-default.png';
+      } ?>) no-repeat center center">
       <div class="container">
         <h2 class="investigation-title"><?php the_title(); ?></h2>
         <a href="<?php echo get_the_permalink(); ?>" class="more">Читать статью</a>
@@ -315,7 +340,14 @@ wp_reset_postdata(); // Сбрасываем $post
             <!-- Вывода постов, функции цикла: the_title() и т.д. -->
             <li class="digest-item">
               <a href="<?php echo get_the_permalink(); ?>" class="digest-item-permalink">
-                <img src="<?php echo get_the_post_thumbnail_url(); ?>" class="digest-thumb">
+                <img src="<?php
+                  if( has_post_thumbnail() ) {
+                    echo get_the_post_thumbnail_url();
+                  }
+                  else {
+                    echo get_template_directory_uri().'/assets/images/img-default.png';
+                  } 
+                ?>" class="digest-thumb">
               </a>
               <div class="digest-info">
                 <button class="bookmark">
@@ -331,11 +363,15 @@ wp_reset_postdata(); // Сбрасываем $post
                 <div class="digest-footer">
                   <span class="digest-date"><?php the_time('j F'); ?></span>
                   <div class="comments digest-comments">
-                    <img src="<?php echo get_template_directory_uri(  ) . '/assets/images/comment.svg'; ?>" class="icon comments-icon" alt="icon: comment">
+                    <svg width="19" height="15" fill="#fff" class="icon comments-icon">
+                      <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#comment"></use>
+                    </svg>
                     <span class="comments-counter"><?php comments_number( "0", '1', '%' ); ?></span>
                   </div>
                   <div class="likes digest-likes">
-                    <img src="<?php echo get_template_directory_uri(  ) . '/assets/images/heart.svg'; ?>" alt="icon: like" class="likes-icon">
+                    <svg width="19" height="15" class="icon likes-icon">
+                      <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#heart"></use>
+                    </svg>
                     <span class="likes-counter"><?php comments_number( "0", '1', '%' ); ?></span>
                   </div>
                 </div>
@@ -365,45 +401,77 @@ wp_reset_postdata(); // Сбрасываем $post
 <div class="special">
   <div class="container">
     <div class="special-grid">
-      <div class="photo-report">
-        <!-- Slider main container -->
-        <div class="swiper-container photo-report-slider">
-          <!-- Additional required wrapper -->
-          <div class="swiper-wrapper">
-            <!-- Slides -->
-            <div class="swiper-slide">
-              <img src="">
+      <?php		
+      global $post;
+
+      $query = new WP_Query( [
+        'posts_per_page' => 5,
+        'category_name' => 'foto-report',
+      ] );
+
+      if ( $query->have_posts() ) {
+        while ( $query->have_posts() ) {
+          $query->the_post();
+          ?>
+          <!-- Вывода постов, функции цикла: the_title() и т.д. -->
+          <div class="photo-report">
+            <!-- Slider main container -->
+            
+            <div class="swiper-container photo-report-slider">
+              <!-- Additional required wrapper -->
+              <div class="swiper-wrapper">
+                <!-- Slides -->
+                <?php $images = get_attached_media( 'image' ); 
+                    foreach ($images as $image ) {
+                      echo '<div class="swiper-slide"><img src="';
+                      print_r($image -> guid);
+                      echo '"></div>';
+                    }
+                  ?>
+              </div>
+              <div class="swiper-pagination"></div>
             </div>
-            <div class="swiper-slide">
-              <img src="">
+            <div class="photo-report-content">
+              <?php 
+                foreach (get_the_category() as $category) {
+                  printf(
+                    '<a href="%s" class="category-link">%s</a>',
+                    esc_url( get_category_link( $category) ),
+                    esc_html($category -> name),
+                  );
+                }
+              ?>
+              <?php $author_id = get_the_author_meta( 'ID'); ?>
+              <a href="<?php echo get_author_posts_url( $author_id); ?>" class="author">
+                <img src="<?php echo get_avatar_url( $author_id); ?>" alt="" class="author-avatar">
+                <div class="author-bio">
+                  <span class="author-name"><?php the_author(); ?></span>
+                  <span class="author-rank">Должность</span>
+                </div>
+              </a>
+              <h3 class="photo-report-title"><?php the_title(); ?></h3>
+              <a href="<?php echo get_the_permalink(); ?>" class="button photo-report-button">
+                <svg width="19" height="15" class="icon photo-report-icon">
+                  <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#images"></use>
+                </svg>
+                Смотреть фото
+                <span class="photo-report-counter"><?php echo count($images);?></span>
+              </a>
             </div>
-            <div class="swiper-slide">
-              <img src="">
-            </div>
+            <!-- /.photo-report-content -->
           </div>
-          <div class="swiper-pagination"></div>
-        </div>
-        <div class="photo-report-content">
-          <a href="#" class="category-link">Фоторубрика</a>
-          <a href="#" class="author">
-            <img src="" alt="" class="author-avatar">
-            <div class="author-bio">
-              <span class="author-name">Артем Исламов</span>
-              <span class="author-rank">Должность</span>
-            </div>
-          </a>
-          <h3 class="photo-report-title">Выбор читателей: где удобнее работать фрилансеру</h3>
-          <a href="#" class="button photo-report-button">
-            <svg width="19" height="15" class="icon photo-report-icon">
-              <use xlink:href=""></use>
-            </svg>
-            Смотреть фото
-            <span class="photo-report-counter">3</span>
-          </a>
-        </div>
-        <!-- /.photo-report-content -->
-      </div>
-      <!-- /.photo-report -->
+          <!-- /.photo-report -->
+          <?php 
+        }
+      } else {
+        // Постов не найдено
+      }
+
+      wp_reset_postdata(); // Сбрасываем $post
+      ?>
+
+
+      
       <div class="other">
         <div class="career-post">
           <a href="#" class="category-link">Карьера</a>
@@ -435,6 +503,7 @@ wp_reset_postdata(); // Сбрасываем $post
   <!-- /.container -->
 </div>
 <!-- /.special -->
+<?php wp_footer(  ); ?>
 
 
 
