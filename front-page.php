@@ -36,7 +36,7 @@
                 '<a href="%s" class="category-link %s">%s</a>',
                 esc_url( get_category_link( $category) ),
                 esc_html($category -> slug),
-                esc_html($category -> name),
+                esc_html($category -> name)
               );
             }
           ?>          
@@ -80,7 +80,7 @@
                     '<a href="%s" class="category-link %s">%s</a>',
                     esc_url( get_category_link( $category) ),
                     esc_html($category -> slug),
-                    esc_html($category -> name),
+                    esc_html($category -> name)
                   );
                 }
               ?>
@@ -437,7 +437,7 @@ wp_reset_postdata(); // Сбрасываем $post
                   printf(
                     '<a href="%s" class="category-link">%s</a>',
                     esc_url( get_category_link( $category) ),
-                    esc_html($category -> name),
+                    esc_html($category -> name)
                   );
                 }
               ?>
@@ -549,8 +549,3 @@ wp_reset_postdata(); // Сбрасываем $post
 </div>
 <!-- /.special -->
 <?php get_footer(); ?>
-
-
-
-
-
