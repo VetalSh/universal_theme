@@ -469,32 +469,77 @@ wp_reset_postdata(); // Сбрасываем $post
 
       wp_reset_postdata(); // Сбрасываем $post
       ?>
-
-
       
       <div class="other">
         <div class="career-post">
-          <a href="#" class="category-link">Карьера</a>
-          <h3 class="career-post-title">Вопросы на собеседовании для джуна</h3>
-          <p class="career-post-excerpt">
-            Каверзные и не очень вопросы, которых боятся новички, когда идут на собеседование
-          </p>
-          <a href="#" class="more">Читать далее</a>
-        </div>
-        <!-- /.career-post -->
-        <div class="other-posts">
-          <a href="#" class="other-post other-post-default">
-            <h4 class="other-post-title">Самые крутые функции в...</h4>
-            <p class="other-post-excerpt">Тут полезный контент</p>
-            <span class="other-post-date">3 декабря 2020</span>
-          </a>
-          <a href="#" class="other-post other-post-default">
-            <h4 class="other-post-title">Новые возможности язык...</h4>
-            <p class="other-post-excerpt">Тут про новые фичи языка CSS</p>
-            <span class="other-post-date">3 декабря 2020</span>
-          </a>
-        </div>
-        <!-- /.other-posts -->
+
+          <?php		
+          global $post;
+          // Формируем запрос в базу данных
+          $query = new WP_Query( [
+            'posts_per_page' => 3,
+            'category_name' => 'career',
+          ] );
+      
+          // Проверяем есть ли посты?
+          if ( $query->have_posts() ) {
+            // создаем переменную счетчик постов
+            $cnt = 0;
+            // пока посты есть, выводим их
+            while ( $query->have_posts() ) {
+              $query->the_post();
+              // увеличиваем счетчик постов
+              $cnt++;
+              switch ($cnt) {
+                // выводим первый пост
+                case '1':
+                  ?>
+                    <a href="<?php echo get_permalink(); ?>" class="category-link"><?php $category = get_the_category(); echo $category[0]->name; ?></a>
+                    <h3 class="career-post-title"><?php echo get_the_title(); ?></h3>
+                    <p class="career-post-excerpt">
+                      <?php echo mb_strimwidth(get_the_excerpt(), 0, 90, '...'); ?>
+                    </p>
+                    <a href="<?php echo get_permalink(); ?>" class="more">Читать далее</a>
+                  </div>
+                  <!-- /.career-post -->
+                  <?php
+                  break;                
+    
+                // выводим пост 2
+                case '2':
+                  ?>
+                    <div class="other-posts">
+                    <a href="<?php the_permalink(); ?>" class="other-post other-post-default">
+                      <h4 class="other-post-title"><?php echo mb_strimwidth(get_the_title(), 0, 50, '...'); ?></h4>
+                      <p class="other-post-excerpt"><?php echo mb_strimwidth(get_the_excerpt(), 0, 85, '...'); ?></p>
+                      <span class="other-post-date"><?php the_time('j F Y'); ?></span>
+                    </a>
+                  <?php
+                  break; 
+
+                // выводим пост 3
+                case '3':
+                  ?>
+                    <a href="<?php the_permalink(); ?>" class="other-post other-post-default">
+                      <h4 class="other-post-title"><?php echo mb_strimwidth(get_the_title(), 0, 50, '...'); ?></h4>
+                      <p class="other-post-excerpt"><?php echo mb_strimwidth(get_the_excerpt(), 0, 85, '...'); ?></p>
+                      <span class="other-post-date"><?php the_time('j F Y'); ?></span>
+                    </a>
+                  </div>
+                  <!-- /.other-posts -->
+                  <?php
+                  break; 
+              }
+      
+              ?>
+              <!-- Вывода постов, функции цикла: the_title() и т.д. -->
+              <?php 
+            }
+          } else {
+            // Постов не найдено
+          }  
+          wp_reset_postdata(); // Сбрасываем $post
+          ?>
       </div>
       <!-- /.other -->
     </div>
@@ -503,7 +548,7 @@ wp_reset_postdata(); // Сбрасываем $post
   <!-- /.container -->
 </div>
 <!-- /.special -->
-<?php wp_footer(  ); ?>
+<?php get_footer(); ?>
 
 
 
